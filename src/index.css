@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom font-family for Pacifico */
+.font-pacifico {
+  font-family: "Pacifico", cursive;
+}
