@@ -58,7 +58,8 @@ const Sidebar: React.FC<{
     <h2 className={`text-sm font-semibold uppercase tracking-wider mb-4 opacity-60 ${textClass}`}>
       Categories
     </h2>
-    <ul role="list" className="space-y-1">
+    {/* <ul role="list" className="space-y-1"> */}
+    <div aria-label="Product list">
       {categories.map((cat) => {
         const active = selected === cat;
         return (
@@ -81,7 +82,7 @@ const Sidebar: React.FC<{
           </li>
         );
       })}
-    </ul>
+    </div>
   </aside>
 );
 

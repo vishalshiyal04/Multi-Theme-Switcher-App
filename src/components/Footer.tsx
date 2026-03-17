@@ -131,7 +131,8 @@ const FooterCol: React.FC<FooterColProps> = (props) => {
   return (
     <div>
       <h3 className={headingClass}>{heading}</h3>
-      <ul className="flex flex-col gap-2.5" role="list">
+      {/* <ul className="flex flex-col gap-2.5" role="list"> */}
+      <ul className="flex flex-col gap-2 sm:gap-2.5">
         {links.map((link) => (
           <li key={link.label}>
             {link.external ? (

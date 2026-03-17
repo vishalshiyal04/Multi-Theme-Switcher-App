@@ -75,7 +75,8 @@ const Header: React.FC = () => {
       </Link>
 
       <nav aria-label="Primary navigation" className="hidden md:block">
-        <ul className="flex items-center gap-1" role="list">
+        {/* <ul className="flex items-center gap-1" role="list"> */}
+        <ul className="flex items-center gap-0.5 lg:gap-1">
           {NAV_LINKS.map(({ to, label }) => {
             const active = pathname === to;
             return (
@@ -193,7 +194,8 @@ const Header: React.FC = () => {
                 theme.colors.headerBg,
               ].join(' ')}
             >
-              <ul role="list">
+              {/* <ul role="list"> */}
+              <ul className="pt-1 pb-2">
                 {NAV_LINKS.map(({ to, label }) => {
                   const active = pathname === to;
                   return (
