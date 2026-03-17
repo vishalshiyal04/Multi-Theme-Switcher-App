@@ -6,6 +6,8 @@ import Header from './components/Header.tsx';
 import HomePage from './pages/HomePage.tsx';
 import AboutPage from './pages/AboutPage.tsx';
 import ContactPage from './pages/ContactPage.tsx';
+import Footer from './components/Footer.tsx';
+
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -23,6 +25,7 @@ const App: React.FC = () => {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
       </Routes>
+      <Footer />
     </div>
   );
 };
