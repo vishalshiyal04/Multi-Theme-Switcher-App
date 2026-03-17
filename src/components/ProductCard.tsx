@@ -1,45 +1,7 @@
-// import React from 'react';
-// import Button from './Button.tsx';
-// import { useTheme } from '../hooks/useTheme.ts';
-
-// interface Product {
-//   id: number;
-//   title: string;
-//   price: number;
-//   description: string;
-//   image: string;
-// }
-
-// const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
-//   const { theme } = useTheme();
-
-//   return (
-//     <div className={`${theme.layout.cardBase} ${theme.colors.cardBg} ${theme.transition}`}>
-//       <img
-//         src={product.image}
-//         alt={product.title}
-//         className="w-full h-48 object-cover rounded-t-xl"
-//         onError={(e) => (e.currentTarget.src = 'https://placehold.co/400x300/e0e0e0/000000?text=No+Image')}
-//       />
-//       <div className="p-4">
-//         <h3 className={`text-lg font-semibold ${theme.colors.text} ${theme.fonts.heading}`}>{product.title}</h3>
-//         <p className={`text-sm ${theme.colors.text} opacity-80 mt-1`}>${product.price.toFixed(2)}</p>
-//         <p className={`text-xs ${theme.colors.text} opacity-70 mt-2 line-clamp-3`}>{product.description}</p>
-//         <div className="mt-4">
-//           <Button>View Details</Button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ProductCard;
-
 import React, { useState } from 'react';
 import Button from './Button.tsx';
 import { useTheme } from '../hooks/useTheme.ts';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface Product {
   id: number;
@@ -66,13 +28,11 @@ interface ProductCardProps {
   priority?: boolean;
 }
 
-// ─── Helper ───────────────────────────────────────────────────────────────────
 
 function formatINR(amount: number): string {
   return '₹' + amount.toLocaleString('en-IN');
 }
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
 
 interface StarRatingProps {
   rate: number;
@@ -127,7 +87,6 @@ const DiscountBadge: React.FC<DiscountBadgeProps> = (props) => {
   );
 };
 
-// ─── Main Component ───────────────────────────────────────────────────────────
 
 const ProductCard: React.FC<ProductCardProps> = (props) => {
   const product = props.product;
@@ -165,7 +124,6 @@ const ProductCard: React.FC<ProductCardProps> = (props) => {
     if (onViewDetails) onViewDetails(product);
   };
 
-  // ── Pre-computed values (Babel-safe) ──────────────────────────────────────
   const imgSrc = imgError
     ? 'https://placehold.co/400x300/d1fae5/16a34a?text=🌿'
     : product.image;
@@ -210,7 +168,6 @@ const ProductCard: React.FC<ProductCardProps> = (props) => {
   return (
     <article aria-label={product.title} className={articleClass}>
 
-      {/* ── Badge ── */}
       {badge && (
         <span
           aria-label={'Badge: ' + badge}
@@ -220,7 +177,6 @@ const ProductCard: React.FC<ProductCardProps> = (props) => {
         </span>
       )}
 
-      {/* ── Wishlist button ── */}
       <button
         aria-label={wishLabel}
         aria-pressed={wishlisted}
@@ -230,7 +186,6 @@ const ProductCard: React.FC<ProductCardProps> = (props) => {
         <span className={wishIconClass} aria-hidden="true">{wishIcon}</span>
       </button>
 
-      {/* ── Image ── */}
       <div className="relative w-full h-48 overflow-hidden bg-white/5">
         {!imgLoaded && !imgError && <ImageSkeleton />}
         <img
@@ -256,7 +211,6 @@ const ProductCard: React.FC<ProductCardProps> = (props) => {
         )}
       </div>
 
-      {/* ── Body ── */}
       <div className="flex flex-col flex-1 p-4 gap-2">
 
         <h3 title={product.title} className={titleClass}>
@@ -273,10 +227,8 @@ const ProductCard: React.FC<ProductCardProps> = (props) => {
 
         <p className={descClass}>{product.description}</p>
 
-        {/* ── Price + Actions ── */}
         <div className="flex items-center justify-between mt-auto pt-3 border-t border-white/10">
 
-          {/* Price block */}
           <div className="flex flex-col gap-0.5">
             {product.originalPrice && (
               <div className="flex items-center gap-1.5">
@@ -294,7 +246,6 @@ const ProductCard: React.FC<ProductCardProps> = (props) => {
             </span>
           </div>
 
-          {/* Action buttons */}
           <div className="flex items-center gap-2">
             <Button
               size="sm"

@@ -1,96 +1,8 @@
-// import React, { ReactNode } from 'react';
-// import { useTheme } from '../hooks/useTheme.ts';
-// import ProductCard from './ProductCard.tsx';
-// import ProductListItem from './ProductListItem.tsx';
-
-// interface Product {
-//   id: number;
-//   title: string;
-//   price: number;
-//   description: string;
-//   category: string;
-//   image: string;
-//   rating: {
-//     rate: number;
-//     count: number;
-//   };
-// }
-
-// const PageContent: React.FC<{ title: string; children?: ReactNode; products?: Product[] }> = ({ title, children, products }) => {
-//   const { theme } = useTheme();
-
-//   const renderProducts = () => {
-//     if (!products || products.length === 0) return <p className={`${theme.colors.text} opacity-80`}>No products to display.</p>;
-
-//     if (theme.name === 'Theme 3') {
-//       return (
-//         <div className={`${theme.layout.cardGrid} ${theme.spacing.gap}`}>
-//           {products.map((product) => (
-//             <ProductCard key={product.id} product={product} />
-//           ))}
-//         </div>
-//       );
-//     } else {
-//       return (
-//         <div className={`flex flex-col ${theme.spacing.gap}`}>
-//           {products.map((product) => (
-//             <ProductListItem key={product.id} product={product} />
-//           ))}
-//         </div>
-//       );
-//     }
-//   };
-
-//   return (
-//     <div className={`min-h-[calc(100vh-6rem)] ${theme.transition} pt-16`}>
-//       {theme.name === 'Theme 2' ? (
-//         <div className={`${theme.layout.container}`}>
-//           <div className={`${theme.layout.sidebar} ${theme.colors.cardBg} shadow-md ${theme.transition}`}>
-//             <h2 className={`text-xl font-bold ${theme.colors.text} mb-4 ${theme.fonts.heading}`}>Categories</h2>
-//             <ul className="space-y-2">
-//               <li className={`${theme.colors.text} opacity-80 hover:opacity-100 cursor-pointer ${theme.transition}`}>Plants</li>
-//               <li className={`${theme.colors.text} opacity-80 hover:opacity-100 cursor-pointer ${theme.transition}`}>Seeds</li>
-//               <li className={`${theme.colors.text} opacity-80 hover:opacity-100 cursor-pointer ${theme.transition}`}>Tools</li>
-//               <li className={`${theme.colors.text} opacity-80 hover:opacity-100 cursor-pointer ${theme.transition}`}>Planters</li>
-//             </ul>
-//           </div>
-//           <main className={`${theme.layout.contentArea} ${theme.colors.background} ${theme.transition}`}>
-//             <h1 className={`text-3xl font-bold ${theme.colors.text} ${theme.spacing.margin} ${theme.fonts.heading}`}>{title}</h1>
-//             {children}
-//             {products && (
-//               <div className={`mt-8 ${theme.spacing.margin}`}>
-//                 <h2 className={`text-2xl font-semibold ${theme.colors.text} ${theme.spacing.margin} ${theme.fonts.heading}`}>Featured Products</h2>
-//                 {renderProducts()}
-//               </div>
-//             )}
-//           </main>
-//         </div>
-//       ) : (
-//         <main className={`${theme.layout.container} ${theme.colors.background} ${theme.transition}`}>
-//           <div className={`${theme.layout.contentArea}`}>
-//             <h1 className={`text-3xl font-bold ${theme.colors.text} ${theme.spacing.margin} ${theme.fonts.heading}`}>{title}</h1>
-//             {children}
-//             {products && (
-//               <div className={`mt-8 ${theme.spacing.margin}`}>
-//                 <h2 className={`text-2xl font-semibold ${theme.colors.text} ${theme.spacing.margin} ${theme.fonts.heading}`}>Featured Products</h2>
-//                 {renderProducts()}
-//               </div>
-//             )}
-//           </div>
-//         </main>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default PageContent;
-
 import React, { ReactNode } from 'react';
 import { useTheme } from '../hooks/useTheme.ts';
 import ProductCard from './ProductCard.tsx';
 import ProductListItem from './ProductListItem.tsx';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Rating {
   rate: number;
@@ -119,7 +31,6 @@ interface PageContentProps {
   isLoading?: boolean;
 }
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
 
 const EmptyState: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`flex flex-col items-center justify-center py-16 gap-3 ${className}`}>
@@ -198,7 +109,6 @@ const ProductGrid: React.FC<{ products: Product[]; isGrid: boolean; gap: string 
   </div>
 );
 
-// ─── Main Component ───────────────────────────────────────────────────────────
 
 const DEFAULT_CATEGORIES = ['All', 'Plants', 'Seeds', 'Tools', 'Planters'];
 
@@ -232,7 +142,6 @@ const PageContent: React.FC<PageContentProps> = ({
       id="main-content"
       className={`flex-1 min-w-0 ${theme.colors.background} ${theme.transition}`}
     >
-      {/* Page header */}
       <div className="mb-8">
         <h1 className={`text-3xl font-bold tracking-tight ${theme.colors.text} ${theme.fonts?.heading ?? ''}`}>
           {title}
@@ -244,10 +153,8 @@ const PageContent: React.FC<PageContentProps> = ({
         )}
       </div>
 
-      {/* Slot for arbitrary page content */}
       {children && <div className="mb-8">{children}</div>}
 
-      {/* Products section */}
       {(products !== undefined || isLoading) && (
         <section aria-labelledby="products-heading">
           <h2
@@ -270,7 +177,6 @@ const PageContent: React.FC<PageContentProps> = ({
         theme.transition,
       ].join(' ')}
     >
-      {/* Skip-to-content for keyboard users */}
       
         < a href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:rounded-md focus:bg-white focus:text-black focus:shadow-lg focus:text-sm focus:font-medium"

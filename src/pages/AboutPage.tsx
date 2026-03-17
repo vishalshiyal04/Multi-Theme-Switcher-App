@@ -1,32 +1,8 @@
-// import React from 'react';
-// import PageContent from '../components/PageContent.tsx';
-// import Button from '../components/Button.tsx';
-
-// const AboutPage: React.FC = () => {
-//   return (
-//     <PageContent title="About Us">
-//       <p className="text-lg mb-6">
-//         Plant Paradise is dedicated to providing high-quality plants and gardening essentials.
-//         Our mission is to connect people with nature and foster a love for sustainable living.
-//       </p>
-//       <p className="text-lg mb-6">
-//         We believe in nurturing growth, both in our plants and in our community.
-//         Join us on this green journey!
-//       </p>
-//       <Button>Learn More</Button>
-//     </PageContent>
-//   );
-// };
-
-// export default AboutPage;
-
-
 import React from 'react';
 import PageContent from '../components/PageContent.tsx';
 import Button from '../components/Button.tsx';
 import { useTheme } from '../hooks/useTheme.ts';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Stat {
   value: string;
@@ -47,7 +23,6 @@ interface Value {
   description: string;
 }
 
-// ─── Static Data ──────────────────────────────────────────────────────────────
 
 const STATS: Stat[] = [
   { value: '10K+', label: 'Delivered', icon: '🌿' },
@@ -95,7 +70,6 @@ const TEAM: TeamMember[] = [
   },
 ];
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
 
 const StatCard: React.FC<Stat & { textClass: string; cardClass: string }> = ({
   value, label, icon, textClass, cardClass,
@@ -130,7 +104,6 @@ const TeamCard: React.FC<TeamMember & { textClass: string; cardClass: string }> 
   </div>
 );
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
 
 const AboutPage: React.FC = () => {
   const { theme } = useTheme();
@@ -139,7 +112,6 @@ const AboutPage: React.FC = () => {
   return (
     <PageContent title="About Us">
 
-      {/* ── Hero blurb ── */}
       <section aria-labelledby="about-intro" className="max-w-2xl mb-10">
         <p id="about-intro" className={`text-lg leading-relaxed mb-4 opacity-80 ${text}`}>
           Plant Paradise is dedicated to providing high-quality plants and gardening
@@ -160,7 +132,6 @@ const AboutPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── Stats ── */}
       <section aria-label="Key statistics" className="mb-12">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {STATS.map((stat) => (
@@ -169,7 +140,6 @@ const AboutPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── Values ── */}
       <section aria-labelledby="values-heading" className="mb-12">
         <h2
           id="values-heading"
@@ -184,7 +154,6 @@ const AboutPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── Team ── */}
       <section aria-labelledby="team-heading" className="mb-12">
         <h2
           id="team-heading"
@@ -199,7 +168,6 @@ const AboutPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── CTA Banner ── */}
       <section
         aria-label="Call to action"
         className={`rounded-2xl p-8 text-center ${cardBg}`}

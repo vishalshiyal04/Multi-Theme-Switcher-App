@@ -1,363 +1,8 @@
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
-// import PageContent from '../components/PageContent.tsx';
-// import Button from '../components/Button.tsx';
-
-// interface Product {
-//   id: number;
-//   title: string;
-//   price: number;
-//   description: string;
-//   category: string;
-//   image: string;
-//   rating: {
-//     rate: number;
-//     count: number;
-//   };
-// }
-
-// const HomePage: React.FC = () => {
-//   const [products, setProducts] = useState<Product[]>([]);
-//   const [loading, setLoading] = useState<boolean>(true);
-//   const [error, setError] = useState<string | null>(null);
-
-//   useEffect(() => {
-//     const fetchProducts = async () => {
-//       try {
-//         setLoading(true);
-//         const response = await axios.get<Product[]>('https://fakestoreapi.com/products?limit=6');
-//         setProducts(response.data);
-//       } catch (err) {
-//         setError('Failed to fetch products. Please try again later.');
-//         console.error('Error fetching products:', err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     fetchProducts();
-//   }, []);
-
-//   return (
-//     <PageContent title="Welcome to Plant Paradise!" products={products}>
-//       <p className="text-lg mb-6">
-//         Discover a wide variety of plants, seeds, and gardening supplies to bring your green dreams to life.
-//         Whether you're a seasoned gardener or just starting, we have everything you need.
-//       </p>
-//       <Button>Explore Products</Button>
-//       {loading && <p className="mt-4">Loading products...</p>}
-//       {error && <p className="mt-4 text-red-500">{error}</p>}
-//     </PageContent>
-//   );
-// };
-
-// export default HomePage;
-
-
-// import React, { useState, useEffect, useCallback } from 'react';
-// import axios, { AxiosError } from 'axios';
-// import PageContent from '../components/PageContent.tsx';
-// import Button from '../components/Button.tsx';
-// import { useTheme } from '../hooks/useTheme.ts';
-
-// // ─── Types ────────────────────────────────────────────────────────────────────
-
-// interface Product {
-//   id: number;
-//   title: string;
-//   price: number;
-//   description: string;
-//   category: string;
-//   image: string;
-//   rating: {
-//     rate: number;
-//     count: number;
-//   };
-// }
-
-// type FetchStatus = 'idle' | 'loading' | 'success' | 'error';
-
-// interface HeroStat {
-//   value: string;
-//   label: string;
-//   icon: string;
-// }
-
-// // ─── Static Data ──────────────────────────────────────────────────────────────
-
-// const HERO_STATS: HeroStat[] = [
-//   { value: '500+', label: 'Plant Varieties', icon: '🌿' },
-//   { value: '10K+', label: 'Happy Customers', icon: '😊' },
-//   { value: '4.9★', label: 'Average Rating',  icon: '⭐' },
-//   { value: 'Free', label: 'Shipping over 5000', icon: '🚚' },
-// ];
-
-// const CATEGORIES: string[] = [
-//   'All',
-//   'Indoor Plants',
-//   'Outdoor Plants',
-//   'Seeds',
-//   'Tools',
-//   'Planters',
-// ];
-
-// const API_URL = 'https://fakestoreapi.com/products?limit=6';
-
-// // ─── Sub-components ───────────────────────────────────────────────────────────
-
-// interface StatCardProps {
-//   value: string;
-//   label: string;
-//   icon: string;
-//   textClass: string;
-//   cardClass: string;
-// }
-
-// const StatCard: React.FC<StatCardProps> = (props) => {
-//   const value = props.value;
-//   const label = props.label;
-//   const icon = props.icon;
-//   const textClass = props.textClass;
-//   const cardClass = props.cardClass;
-
-//   const wrapClass = 'flex flex-col items-center gap-1 p-4 rounded-xl text-center ' + cardClass;
-//   const valueClass = 'text-xl font-bold tabular-nums ' + textClass;
-//   const labelClass = 'text-xs opacity-50 ' + textClass;
-
-//   return (
-//     <div className={wrapClass}>
-//       <span className="text-2xl" aria-hidden="true">{icon}</span>
-//       <span className={valueClass}>{value}</span>
-//       <span className={labelClass}>{label}</span>
-//     </div>
-//   );
-// };
-
-// interface CategoryChipProps {
-//   label: string;
-//   active: boolean;
-//   onClick: () => void;
-//   textClass: string;
-//   cardClass: string;
-//   activeClass: string;
-// }
-
-// const CategoryChip: React.FC<CategoryChipProps> = (props) => {
-//   const label = props.label;
-//   const active = props.active;
-//   const onClick = props.onClick;
-//   const textClass = props.textClass;
-//   const cardClass = props.cardClass;
-//   const activeClass = props.activeClass;
-
-//   const base = 'px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 ';
-//   const cls = active
-//     ? base + activeClass + ' text-white'
-//     : base + cardClass + ' ' + textClass + ' opacity-60 hover:opacity-100';
-
-//   return (
-//     <button
-//       onClick={onClick}
-//       aria-pressed={active}
-//       className={cls}
-//     >
-//       {label}
-//     </button>
-//   );
-// };
-
-// const ErrorBanner: React.FC<{ message: string; onRetry: () => void }> = (props) => {
-//   const message = props.message;
-//   const onRetry = props.onRetry;
-
-//   return (
-//     <div
-//       role="alert"
-//       className="flex items-center justify-between gap-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm"
-//     >
-//       <span>
-//         <span aria-hidden="true">⚠ </span>
-//         {message}
-//       </span>
-//       <Button variant="outline" size="sm" onClick={onRetry}>
-//         Retry
-//       </Button>
-//     </div>
-//   );
-// };
-
-// const SkeletonBanner: React.FC = () => (
-//   <div className="animate-pulse rounded-2xl h-48 bg-white/10" aria-hidden="true" />
-// );
-
-// // ─── Page ─────────────────────────────────────────────────────────────────────
-
-// const HomePage: React.FC = () => {
-//   const { theme } = useTheme();
-//   const text = theme.colors.text;
-//   const cardBg = theme.colors.cardBg;
-//   const primaryBg = theme.colors.primary;
-//   const headingFont = theme.fonts && theme.fonts.heading ? theme.fonts.heading : '';
-
-//   const [products, setProducts] = useState<Product[]>([]);
-//   const [status, setStatus] = useState<FetchStatus>('idle');
-//   const [error, setError] = useState<string | null>(null);
-//   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-
-//   const fetchProducts = useCallback(async () => {
-//     setStatus('loading');
-//     setError(null);
-//     try {
-//       const response = await axios.get<Product[]>(API_URL);
-//       setProducts(response.data);
-//       setStatus('success');
-//     } catch (err) {
-//       const axiosErr = err as AxiosError;
-//       const msg = axiosErr.message
-//         ? 'Failed to load products: ' + axiosErr.message
-//         : 'Failed to load products. Please try again.';
-//       setError(msg);
-//       setStatus('error');
-//       console.error('[HomePage] fetch error:', err);
-//     }
-//   }, []);
-
-//   useEffect(() => {
-//     fetchProducts();
-//   }, [fetchProducts]);
-
-//   const isLoading = status === 'loading' || status === 'idle';
-//   const isError = status === 'error';
-
-//   const introClass = 'text-base leading-relaxed opacity-70 max-w-2xl mb-6 ' + text;
-//   const sectionHeadingClass = 'text-xl font-semibold mb-5 ' + text + ' ' + headingFont;
-//   const heroBannerClass = 'rounded-2xl p-8 sm:p-12 mb-10 ' + cardBg;
-//   const titleClass = 'text-3xl sm:text-4xl font-bold mb-3 ' + text + ' ' + headingFont;
-//   const subtitleClass = 'text-base opacity-60 mb-6 max-w-lg ' + text;
-
-//   return (
-//     <PageContent
-//       title=""
-//       products={isError ? [] : products}
-//       isLoading={isLoading}
-//       useGridLayout={true}
-//       selectedCategory={selectedCategory}
-//       onCategorySelect={setSelectedCategory}
-//     >
-
-//       {/* ── Hero Banner ── */}
-//       {isLoading ? (
-//         <SkeletonBanner />
-//       ) : (
-//         <section aria-labelledby="hero-heading" className={heroBannerClass}>
-//           <p className="text-4xl mb-4" aria-hidden="true">🌱</p>
-//           <h1 id="hero-heading" className={titleClass}>
-//             Welcome to Plant Paradise
-//           </h1>
-//           <p className={subtitleClass}>
-//             Discover hundreds of plants, seeds, and gardening supplies.
-//             Whether you are a seasoned gardener or just starting out, we have
-//             everything you need to grow.
-//           </p>
-//           <div className="flex flex-wrap gap-3">
-//             <Button variant="solid" size="md">
-//               Shop Now
-//             </Button>
-//             <Button variant="outline" size="md">
-//               Browse Categories
-//             </Button>
-//           </div>
-//         </section>
-//       )}
-
-//       {/* ── Stats ── */}
-//       <section aria-label="Key statistics" className="mb-10">
-//         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-//           {HERO_STATS.map((stat) => (
-//             <StatCard
-//               key={stat.label}
-//               value={stat.value}
-//               label={stat.label}
-//               icon={stat.icon}
-//               textClass={text}
-//               cardClass={cardBg}
-//             />
-//           ))}
-//         </div>
-//       </section>
-
-//       {/* ── Category Filter ── */}
-//       <section aria-label="Filter by category" className="mb-6">
-//         <h2 className={sectionHeadingClass}>Featured Products</h2>
-//         <div
-//           role="group"
-//           aria-label="Product categories"
-//           className="flex flex-wrap gap-2 mb-6"
-//         >
-//           {CATEGORIES.map((cat) => (
-//             <CategoryChip
-//               key={cat}
-//               label={cat}
-//               active={selectedCategory === cat}
-//               onClick={() => setSelectedCategory(cat)}
-//               textClass={text}
-//               cardClass={cardBg}
-//               activeClass={primaryBg}
-//             />
-//           ))}
-//         </div>
-//       </section>
-
-//       {/* ── Error Banner ── */}
-//       {isError && error && (
-//         <ErrorBanner message={error} onRetry={fetchProducts} />
-//       )}
-
-//       {/* ── Newsletter CTA ── */}
-//       {!isLoading && !isError && (
-//         <section
-//           aria-labelledby="newsletter-heading"
-//           className={'rounded-2xl p-8 text-center mt-10 ' + cardBg}
-//         >
-//           <p className="text-2xl mb-2" aria-hidden="true">💌</p>
-//           <h2
-//             id="newsletter-heading"
-//             className={'text-lg font-semibold mb-1 ' + text + ' ' + headingFont}
-//           >
-//             Stay in the Loop
-//           </h2>
-//           <p className={'text-sm opacity-60 mb-5 ' + text}>
-//             Get plant care tips, new arrivals, and exclusive deals straight to your inbox.
-//           </p>
-//           <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
-//             <input
-//               type="email"
-//               placeholder="your@email.com"
-//               aria-label="Email address for newsletter"
-//               className={
-//                 'flex-1 px-4 py-2.5 rounded-lg text-sm border outline-none ' +
-//                 'focus:ring-2 focus:ring-offset-1 placeholder:opacity-40 ' +
-//                 cardBg + ' ' + text + ' border-white/20'
-//               }
-//             />
-//             <Button variant="solid" size="md">
-//               Subscribe
-//             </Button>
-//           </div>
-//         </section>
-//       )}
-
-//     </PageContent>
-//   );
-// };
-
-// export default HomePage;
-
 import React, { useState, useEffect, useCallback } from 'react';
 import PageContent from '../components/PageContent.tsx';
 import Button from '../components/Button.tsx';
 import { useTheme } from '../hooks/useTheme.ts';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Product {
   id: number;
@@ -380,7 +25,6 @@ interface HeroStat {
   icon: string;
 }
 
-// ─── Static Data ──────────────────────────────────────────────────────────────
 
 const HERO_STATS: HeroStat[] = [
   { value: '500+', label: 'Plant Varieties',   icon: '🌿' },
@@ -481,7 +125,6 @@ const PLANT_PRODUCTS: Product[] = [
   },
 ];
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
 
 interface StatCardProps {
   value: string;
@@ -553,7 +196,6 @@ const SkeletonBanner: React.FC = () => (
   <div className="animate-pulse rounded-2xl h-48 bg-white/10" aria-hidden="true" />
 );
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
 
 const HomePage: React.FC = () => {
   const { theme } = useTheme();
@@ -613,7 +255,6 @@ const HomePage: React.FC = () => {
       onCategorySelect={setSelectedCategory}
     >
 
-      {/* ── Hero Banner ── */}
       {isLoading ? (
         <SkeletonBanner />
       ) : (
@@ -634,7 +275,6 @@ const HomePage: React.FC = () => {
         </section>
       )}
 
-      {/* ── Stats ── */}
       <section aria-label="Key statistics" className="mb-10">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {HERO_STATS.map((stat) => (
@@ -650,7 +290,6 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── Category Filter ── */}
       <section aria-label="Filter by category" className="mb-6">
         <h2 className={sectionHeadingClass}>Featured Products</h2>
         <div role="group" aria-label="Product categories" className="flex flex-wrap gap-2 mb-6">
@@ -668,12 +307,10 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── Error Banner ── */}
       {isError && error && (
         <ErrorBanner message={error} onRetry={fetchProducts} />
       )}
 
-      {/* ── Newsletter CTA ── */}
       {!isLoading && !isError && (
         <section aria-labelledby="newsletter-heading" className={newsletterSectionClass}>
           <p className="text-2xl mb-2" aria-hidden="true">💌</p>

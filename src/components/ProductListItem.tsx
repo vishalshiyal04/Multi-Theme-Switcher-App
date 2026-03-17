@@ -1,301 +1,7 @@
-// import React from 'react';
-// import Button from './Button.tsx';
-// import { useTheme } from '../hooks/useTheme.ts';
-
-// interface Product {
-//   id: number;
-//   title: string;
-//   price: number;
-//   description: string;
-//   image: string;
-// }
-
-// const ProductListItem: React.FC<{ product: Product }> = ({ product }) => {
-//   const { theme } = useTheme();
-
-//   return (
-//     <div className={`flex items-center ${theme.spacing.padding} ${theme.colors.cardBg} rounded-lg shadow-sm ${theme.transition}`}>
-//       <img
-//         src={product.image}
-//         alt={product.title}
-//         className="w-20 h-20 object-cover rounded-md mr-4"
-//         onError={(e) => (e.currentTarget.src = 'https://placehold.co/80x80/e0e0e0/000000?text=No+Image')}
-//       />
-//       <div className="flex-1">
-//         <h3 className={`text-lg font-semibold ${theme.colors.text} ${theme.fonts.heading}`}>{product.title}</h3>
-//         <p className={`text-sm ${theme.colors.text} opacity-80 mt-1`}>${product.price.toFixed(2)}</p>
-//       </div>
-//       <Button>Add to Cart</Button>
-//     </div>
-//   );
-// };
-
-// export default ProductListItem;
-
-// import React, { useState } from 'react';
-// import Button from './Button.tsx';
-// import { useTheme } from '../hooks/useTheme.ts';
-
-// // ─── Types ────────────────────────────────────────────────────────────────────
-
-// export interface Product {
-//   id: number;
-//   title: string;
-//   price: number;
-//   description: string;
-//   image: string;
-//   category?: string;
-//   rating?: {
-//     rate: number;
-//     count: number;
-//   };
-//   originalPrice?: number; // for discount display
-//   inStock?: boolean;
-// }
-
-// interface ProductListItemProps {
-//   product: Product;
-//   onAddToCart?: (product: Product) => void;
-//   onViewDetails?: (product: Product) => void;
-//   onWishlist?: (product: Product) => void;
-//   isWishlisted?: boolean;
-// }
-
-// // ─── Sub-components ───────────────────────────────────────────────────────────
-
-// const StarRating: React.FC<{ rate: number; count: number; textClass: string }> = ({
-//   rate,
-//   count,
-//   textClass,
-// }) => (
-//   <div
-//     className="flex items-center gap-1"
-//     aria-label={`Rated ${rate} out of 5, ${count} reviews`}
-//   >
-//     <span className="text-amber-400 text-xs" aria-hidden="true">
-//       {'★'.repeat(Math.floor(rate))}
-//       {rate % 1 >= 0.5 ? '½' : ''}
-//     </span>
-//     <span className={`text-xs opacity-50 tabular-nums ${textClass}`}>
-//       {rate.toFixed(1)} ({count})
-//     </span>
-//   </div>
-// );
-
-// const DiscountBadge: React.FC<{ original: number; current: number }> = ({
-//   original,
-//   current,
-// }) => {
-//   const pct = Math.round(((original - current) / original) * 100);
-//   if (pct <= 0) return null;
-//   return (
-//     <span
-//       aria-label={`${pct}% off`}
-//       className="px-1.5 py-0.5 rounded text-xs font-semibold bg-red-500/15 text-red-500"
-//     >
-//       -{pct}%
-//     </span>
-//   );
-// };
-
-// const ImageSkeleton: React.FC = () => (
-//   <div
-//     className="w-20 h-20 rounded-lg bg-white/10 animate-pulse shrink-0"
-//     aria-hidden="true"
-//   />
-// );
-
-// // ─── Main Component ───────────────────────────────────────────────────────────
-
-// const ProductListItem: React.FC<ProductListItemProps> = ({
-//   product,
-//   onAddToCart,
-//   onViewDetails,
-//   onWishlist,
-//   isWishlisted = false,
-// }) => {
-//   const { theme } = useTheme();
-//   const [imgLoaded, setImgLoaded] = useState(false);
-//   const [imgError, setImgError] = useState(false);
-//   const [wishlisted, setWishlisted] = useState(isWishlisted);
-//   const [addedToCart, setAddedToCart] = useState(false);
-
-//   const inStock = product.inStock ?? true;
-
-//   const handleAddToCart = () => {
-//     if (!inStock) return;
-//     onAddToCart?.(product);
-//     setAddedToCart(true);
-//     setTimeout(() => setAddedToCart(false), 2000);
-//   };
-
-//   const handleWishlist = () => {
-//     setWishlisted((w) => !w);
-//     onWishlist?.(product);
-//   };
-
-//   return (
-//     <article
-//       aria-label={product.title}
-//       className={[
-//         'group flex items-start sm:items-center gap-4',
-//         'rounded-xl p-3 sm:p-4',
-//         'transition-all duration-200 ease-out',
-//         'hover:shadow-md hover:-translate-y-0.5',
-//         'focus-within:ring-2 focus-within:ring-offset-1',
-//         'motion-reduce:hover:translate-y-0 motion-reduce:transition-none',
-//         theme.colors.cardBg,
-//         theme.transition,
-//       ].join(' ')}
-//     >
-//       {/* ── Image ── */}
-//       <div className="relative shrink-0">
-//         {!imgLoaded && !imgError && <ImageSkeleton />}
-//         <img
-//           src={
-//             imgError
-//               ? 'https://placehold.co/80x80/e0e0e0/999999?text=No+Image'
-//               : product.image
-//           }
-//           alt={product.title}
-//           loading="lazy"
-//           decoding="async"
-//           onLoad={() => setImgLoaded(true)}
-//           onError={() => { setImgError(true); setImgLoaded(true); }}
-//           className={[
-//             'w-20 h-20 object-cover rounded-lg',
-//             'transition-all duration-300',
-//             'group-hover:scale-105 motion-reduce:group-hover:scale-100',
-//             imgLoaded ? 'opacity-100' : 'opacity-0 absolute inset-0',
-//           ].join(' ')}
-//         />
-
-//         {/* Out of stock overlay */}
-//         {!inStock && (
-//           <div className="absolute inset-0 rounded-lg bg-black/50 flex items-center justify-center">
-//             <span className="text-white text-[10px] font-semibold text-center leading-tight px-1">
-//               Out of<br />Stock
-//             </span>
-//           </div>
-//         )}
-//       </div>
-
-//       {/* ── Content ── */}
-//       <div className="flex-1 min-w-0 flex flex-col gap-1">
-
-//         {/* Title + category */}
-//         <div className="flex items-start justify-between gap-2">
-//           <h3
-//             title={product.title}
-//             className={[
-//               'text-sm font-semibold leading-snug line-clamp-2',
-//               theme.colors.text,
-//               theme.fonts?.heading ?? '',
-//             ].join(' ')}
-//           >
-//             {product.title}
-//           </h3>
-
-//           {/* Wishlist — visible on hover or focus */}
-//           <button
-//             aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-//             aria-pressed={wishlisted}
-//             onClick={handleWishlist}
-//             className={[
-//               'shrink-0 w-7 h-7 flex items-center justify-center rounded-full',
-//               'transition-all duration-150',
-//               'hover:scale-110 active:scale-95',
-//               'focus-visible:outline-none focus-visible:ring-2',
-//               'opacity-0 group-hover:opacity-100 focus-visible:opacity-100',
-//               'motion-reduce:hover:scale-100',
-//               'bg-white/10',
-//             ].join(' ')}
-//           >
-//             <span
-//               className={`text-sm transition-colors ${wishlisted ? 'text-red-500' : 'opacity-40'}`}
-//               aria-hidden="true"
-//             >
-//               {wishlisted ? '♥' : '♡'}
-//             </span>
-//           </button>
-//         </div>
-
-//         {/* Category chip */}
-//         {product.category && (
-//           <span className={`text-xs opacity-50 capitalize ${theme.colors.text}`}>
-//             {product.category}
-//           </span>
-//         )}
-
-//         {/* Rating */}
-//         {product.rating && (
-//           <StarRating
-//             rate={product.rating.rate}
-//             count={product.rating.count}
-//             textClass={theme.colors.text}
-//           />
-//         )}
-//       </div>
-
-//       {/* ── Price + Actions ── */}
-//       <div className="shrink-0 flex flex-col items-end gap-2 ml-auto">
-
-//         {/* Price row */}
-//         <div className="flex items-center gap-2 flex-wrap justify-end">
-//           {product.originalPrice && (
-//             <span className={`text-xs line-through opacity-40 tabular-nums ${theme.colors.text}`}>
-//               ${product.originalPrice.toFixed(2)}
-//             </span>
-//           )}
-//           <span
-//             className={`text-base font-bold tabular-nums ${theme.colors.text}`}
-//             aria-label={`Price: $${product.price.toFixed(2)}`}
-//           >
-//             ${product.price.toFixed(2)}
-//           </span>
-//           {product.originalPrice && (
-//             <DiscountBadge original={product.originalPrice} current={product.price} />
-//           )}
-//         </div>
-
-//         {/* Actions */}
-//         <div className="flex items-center gap-2">
-//           <Button
-//             size="sm"
-//             variant="ghost"
-//             onClick={() => onViewDetails?.(product)}
-//             aria-label={`View details for ${product.title}`}
-//           >
-//             Details
-//           </Button>
-//           <Button
-//             size="sm"
-//             variant="solid"
-//             disabled={!inStock}
-//             onClick={handleAddToCart}
-//             aria-label={
-//               !inStock
-//                 ? 'Out of stock'
-//                 : addedToCart
-//                 ? 'Added to cart'
-//                 : `Add ${product.title} to cart`
-//             }
-//           >
-//             {!inStock ? 'Out of Stock' : addedToCart ? '✓ Added' : 'Add to Cart'}
-//           </Button>
-//         </div>
-//       </div>
-//     </article>
-//   );
-// };
-
-// export default ProductListItem;
-
 import React, { useState } from 'react';
 import Button from './Button.tsx';
 import { useTheme } from '../hooks/useTheme.ts';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface Product {
   id: number;
@@ -323,13 +29,11 @@ interface ProductListItemProps {
   isWishlisted?: boolean;
 }
 
-// ─── Helper ───────────────────────────────────────────────────────────────────
 
 function formatINR(amount: number): string {
   return '₹' + amount.toLocaleString('en-IN');
 }
 
-// ─── Static Maps ─────────────────────────────────────────────────────────────
 
 const CARE_COLOR: Record<string, string> = {
   Easy:     'bg-green-500/15 text-green-600',
@@ -357,7 +61,6 @@ const CATEGORY_ICON: Record<string, string> = {
   'planters':       '🏺',
 };
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
 
 interface StarRatingProps {
   rate: number;
@@ -446,7 +149,6 @@ const PlantTraits: React.FC<PlantTraitsProps> = (props) => {
   );
 };
 
-// ─── Main Component ───────────────────────────────────────────────────────────
 
 const ProductListItem: React.FC<ProductListItemProps> = (props) => {
   const product = props.product;
@@ -484,7 +186,6 @@ const ProductListItem: React.FC<ProductListItemProps> = (props) => {
     if (onViewDetails) onViewDetails(product);
   };
 
-  // ── Pre-computed values (Babel-safe) ──────────────────────────────────────
 
   const articleClass =
     'group flex items-start sm:items-center gap-4 ' +
@@ -531,7 +232,7 @@ const ProductListItem: React.FC<ProductListItemProps> = (props) => {
   return (
     <article aria-label={product.title} className={articleClass}>
 
-      {/* ── Plant Image ── */}
+      {/* Plant Image */}
       <div className="relative shrink-0">
         {!imgLoaded && !imgError && <ImageSkeleton />}
         <img
@@ -552,7 +253,7 @@ const ProductListItem: React.FC<ProductListItemProps> = (props) => {
         )}
       </div>
 
-      {/* ── Plant Info ── */}
+      {/*Plant Info*/}
       <div className="flex-1 min-w-0 flex flex-col gap-1.5">
 
         {/* Title row + wishlist */}
@@ -598,7 +299,7 @@ const ProductListItem: React.FC<ProductListItemProps> = (props) => {
         )}
       </div>
 
-      {/* ── Price + Actions ── */}
+      {/*Price + Actions*/}
       <div className="shrink-0 flex flex-col items-end gap-2 ml-auto">
 
         {/* Price */}

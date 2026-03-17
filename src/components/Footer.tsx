@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme.ts';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
 interface FooterLink {
   label: string;
   to: string;
@@ -25,8 +23,6 @@ interface PaymentMethod {
   label: string;
   icon: string;
 }
-
-// ─── Static Data ──────────────────────────────────────────────────────────────
 
 const FOOTER_SECTIONS: FooterSection[] = [
   {
@@ -95,7 +91,6 @@ const TRUST_BADGES = [
 
 const CURRENT_YEAR = new Date().getFullYear();
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
 
 interface TrustBadgeProps {
   icon: string;
@@ -160,7 +155,6 @@ const FooterCol: React.FC<FooterColProps> = (props) => {
   );
 };
 
-// ─── Main Component ───────────────────────────────────────────────────────────
 
 const Footer: React.FC = () => {
   const { theme } = useTheme();
@@ -189,7 +183,6 @@ const Footer: React.FC = () => {
     setEmail('');
   };
 
-  // ── Pre-computed classes ──────────────────────────────────────────────────
 
   const footerClass = 'w-full mt-16 ' + headerBg + ' ' + theme.transition;
   const dividerClass = 'border-t ' + border;
@@ -218,7 +211,6 @@ const Footer: React.FC = () => {
   return (
     <footer role="contentinfo" className={footerClass}>
 
-      {/* ── Trust Badges Strip ── */}
       <div className={dividerClass}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -235,15 +227,12 @@ const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* ── Main Footer Body ── */}
       <div className={dividerClass}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 lg:grid-cols-6 gap-10">
 
-            {/* ── Brand Column (2/6) ── */}
             <div className="lg:col-span-2 flex flex-col gap-5">
 
-              {/* Logo */}
               <div>
                 <div className={logoClass}>
                   <span aria-hidden="true">🌱</span>
@@ -255,7 +244,6 @@ const Footer: React.FC = () => {
                 </p>
               </div>
 
-              {/* Contact info */}
               <div className="flex flex-col gap-2">
                 <p className={sectionHeadingClass}>Contact</p>
                 
@@ -278,7 +266,6 @@ const Footer: React.FC = () => {
                 </p>
               </div>
 
-              {/* Social links */}
               <div>
                 <p className={sectionHeadingClass}>Follow Us</p>
                 <div className="flex items-center gap-2">
@@ -304,7 +291,6 @@ const Footer: React.FC = () => {
 
             </div>
 
-            {/* ── Link Columns (4/6) ── */}
             <div className="lg:col-span-4 grid grid-cols-2 sm:grid-cols-4 gap-8">
               {FOOTER_SECTIONS.map((section) => (
                 <FooterCol
@@ -319,7 +305,6 @@ const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* ── Newsletter Strip ── */}
       <div className={dividerClass}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
@@ -366,17 +351,14 @@ const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* ── Bottom Bar ── */}
       <div className={dividerClass}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
 
-            {/* Copyright */}
             <p className={copyrightClass}>
               © {CURRENT_YEAR} Plant Paradise. All rights reserved. Made with 💚 in Ahmedabad.
             </p>
 
-            {/* Payment methods */}
             <div className="flex items-center gap-2">
               <p className={'text-xs opacity-30 mr-1 ' + text}>We accept:</p>
               {PAYMENT_METHODS.map((pm) => (
@@ -393,7 +375,6 @@ const Footer: React.FC = () => {
               ))}
             </div>
 
-            {/* Bottom links */}
             <div className="flex items-center gap-4">
               <Link to="/" className={bottomLinkClass}>Privacy</Link>
               <Link to="/" className={bottomLinkClass}>Terms</Link>
